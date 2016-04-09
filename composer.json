@@ -11,10 +11,10 @@
     "require": {
         "squizlabs/php_codesniffer": "*"
     },
-    "bin": {
+    "bin": [
         "bin/checkrun",
         "bin/checkstyle"
-    }
+    ],
     "config": {
         "bin-dir": "bin"
     }
