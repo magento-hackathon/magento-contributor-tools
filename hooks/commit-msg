@@ -1,0 +1,35 @@
+#!/usr/bin/env php
+<?php
+
+$commit = file_get_contents($argv[1]);
+$commit = false !== strpos($commit, PHP_EOL) ? substr($commit, 0, strpos($commit, PHP_EOL)) : $commit;
+$prefixes = ['[TASK]', '[DOC]', '[BUGFIX]', '[FEATURE]', '[REMOVAL]', 'Merge'];
+
+$errors = false;
+$messages = [];
+
+if (false === empty($commit) || substr_count(' ', $commit)) {
+    echo 'ERROR!: Message is of insufficient length - did you neglect to include a prefix? Valid ones are ';
+    echo implode(', ', $prefixes);
+    echo PHP_EOL;
+    exit(1);
+}
+
+list ($prefix, $message) = explode(' ', $commit, 2);
+if (false === in_array($prefix, $prefixes)) {
+    $errors = true;
+    $messages[] = 'We detected "' . $prefix . '" used as prefix which is not valid.';
+    $messages[] = 'Subject must use one of valid prefixes ' . implode(', ', $prefixes);
+} elseif ($message{0} !== mb_strtoupper($message{0}) && 'Merge' !== $prefix) {
+    $errors = true;
+    $messages[] = 'Subject text after prefix must start with an uppercase letter but we detected a lowercase letter';
+}
+
+if (true === $errors) {
+    echo PHP_EOL;
+    echo implode(PHP_EOL, $messages);
+    echo PHP_EOL;
+    exit(1);
+}
+
+echo PHP_EOL;
