@@ -1,0 +1,12 @@
+{
+    "name": "amacgregor/magento-contributor-tools",
+    "license": "OSL-3.0",
+    "authors": [
+        {
+            "name": "Allan MacGregor",
+            "email": "amacgregor@allanmacgregor.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}
