@@ -43,22 +43,63 @@ class CheckRunner
         }
 
         // Install the main precommit hook
-        $preCommitScript = $root . '/.git/hooks/pre-commit';
-        file_put_contents($preCommitScript, '#!/bin/sh' . PHP_EOL . $path . '/checkrun');
-        chmod($preCommitScript, 0755);
-        
+        $this->installGitHook($root, $path, 'checkrun');
+
         //TODO: Check/Install for the git commit message hook
-        
+
         //TODO: Check/Install for the prepare commit message hook
 
 
+        // Step 4: execute each of the dedicated checkers:
+        foreach ($checkers as $checker) {
+            echo '++ Running: ' . $checker;
+            echo PHP_EOL;
+            echo PHP_EOL;
+
+            $descriptors = [
+                ["pipe", "r"],
+                ["pipe", "w"],
+                ["pipe", "r"]
+            ];
+            $pipes = [];
+
+            $process = proc_open($path . $checker, $descriptors, $pipes);
+            fclose($pipes[0]);
+
+            while ($threeChars = fread($pipes[1], 24)) {
+                echo $threeChars;
+            }
+
+            fclose($pipes[1]);
+
+            $errors = stream_get_contents($pipes[2]);
+            fclose($pipes[2]);
+
+            $exit = proc_close($process);
+
+            if (0 < $exit) {
+                $this->exitWithError($errors, $exit);
+            }
+            echo PHP_EOL;
+        }
+        //TODO: Refactor
+        echo '++ All checks and tests completed succesfully!';
+        echo PHP_EOL;
+        exit(0);
+    }
+
+    /**
+     * @param $root
+     * @param $path
+     * @param $check
+     */
+    protected function installGitHook($root, $path, $check)
+    {
+        $preCommitScript = $root . '/.git/hooks/pre-commit';
+        file_put_contents($preCommitScript, '#!/bin/sh' . PHP_EOL . $path . '/' . $check);
+        chmod($preCommitScript, 0755);
     }
 }
 
 $runner = new CheckRunner();
 $runner->run($argv);
-
-echo '++ All checks and tests completed succesfully!';
-echo PHP_EOL;
-
-exit(0);
