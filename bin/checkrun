@@ -1,0 +1,64 @@
+#!/usr/bin/env php
+<?php
+/**
+ * Main command for running the code style validation, unit tests and commit message checks.
+ */
+
+class CheckRunner
+{
+    protected function exitWithError($message, $code = 1)
+    {
+        echo '!! ERROR !!';
+        echo PHP_EOL;
+        echo PHP_EOL;
+        echo $message;
+        echo PHP_EOL;
+        exit($code);
+    }
+
+    public function run($argv = [])
+    {
+        $checkers    = [];
+        $executables = array_merge(['phpcs'], $checkers);
+
+        $path = dirname($argv[0]) . '/';
+        $root = substr($path, 0, -11);
+        $root = realpath($root);
+
+        # Step 2: Check that the hooks are in place and if not add them
+        $standardPathWarning = 'Path "%s" does not appear to contain an executable "phpunit" binary. Please make sure you called the ' .
+            'script using the path ./vendor/bin/checkrun from the root of your project folder';
+
+        foreach ($executables as $expectedExecutable) {
+            $executable = $path . $expectedExecutable;
+            if (FALSE === is_executable(realpath($executable))) {
+                $this->exitWithError(sprintf($standardPathWarning, $path, $expectedExecutable), 2);
+            }
+        }
+        
+        # Step 3: Run the checkers
+        $postCommitScript = $root . '/.git/hooks/post-commit';
+        if (true === file_exists($postCommitScript)) {
+            unlink($postCommitScript);
+        }
+
+        // Install the main precommit hook
+        $preCommitScript = $root . '/.git/hooks/pre-commit';
+        file_put_contents($preCommitScript, '#!/bin/sh' . PHP_EOL . $path . '/checkrun');
+        chmod($preCommitScript, 0755);
+        
+        //TODO: Check/Install for the git commit message hook
+        
+        //TODO: Check/Install for the prepare commit message hook
+
+
+    }
+}
+
+$runner = new CheckRunner();
+$runner->run($argv);
+
+echo '++ All checks and tests completed succesfully!';
+echo PHP_EOL;
+
+exit(0);
