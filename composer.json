@@ -8,5 +8,10 @@
         }
     ],
     "minimum-stability": "dev",
-    "require": {}
+    "require": {
+        "squizlabs/php_codesniffer": "*"
+    },
+    "config": {
+        "bin-dir": "bin"
+    }
 }
