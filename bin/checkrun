@@ -18,7 +18,7 @@ class CheckRunner
 
     public function run($argv = [])
     {
-        $checkers    = [];
+        $checkers    = ['checkstyle'];
         $executables = array_merge(['phpcs'], $checkers);
 
         $path = dirname($argv[0]) . '/';

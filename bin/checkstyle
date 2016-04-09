@@ -1,0 +1,30 @@
+#!/usr/bin/env php
+<?php
+$path = dirname($argv[0]) . '/';
+$root = substr($path, 0, -11);
+$root = realpath($root);
+
+echo $root;
+
+$command = 'bin/phpcs -p --extensions=php --ignore=vendor --standard=PSR1,PSR2 .';
+$descriptors = array(
+    array("pipe", "r"),
+    array("pipe", "w"),
+    array("pipe", "r")
+);
+$pipes = array();
+$process = proc_open($command, $descriptors, $pipes, $root);
+fclose($pipes[0]);
+while ($char = fread($pipes[1], 8)) {
+    echo $char;
+}
+$errors = 0 < strlen(stream_get_contents($pipes[2]));
+fclose($pipes[1]);
+fclose($pipes[2]);
+$exit = proc_close($process);
+if (0 < $exit) {
+    exit($exit);
+} else {
+    echo 'No problems detected by CodeSniffer';
+    echo PHP_EOL;
+}
