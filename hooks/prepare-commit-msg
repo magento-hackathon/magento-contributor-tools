@@ -45,3 +45,5 @@ Description
 # Thank you for your commit!
 #
 MESSAGE;
+
+file_put_contents($argv[1], $message);

@@ -43,11 +43,13 @@ class CheckRunner
         }
 
         // Install the main precommit hook
-        $this->installGitHook($root, $path, 'checkrun');
+        $this->installCheckRun($root, $path);
 
-        //TODO: Check/Install for the git commit message hook
+        //Check/Install for the git commit message hook
+        $this->installGitHook($root, 'hooks', 'commit-msg', 'commit-msg');
 
-        //TODO: Check/Install for the prepare commit message hook
+        //Check/Install for the prepare commit message hook
+        $this->installGitHook($root, 'hooks', 'prepare-commit-msg', 'prepare-commit-msg');
 
 
         // Step 4: execute each of the dedicated checkers:
@@ -93,12 +95,21 @@ class CheckRunner
      * @param $path
      * @param $check
      */
-    protected function installGitHook($root, $path, $check)
+    protected function installCheckRun($root, $path)
     {
         $preCommitScript = $root . '/.git/hooks/pre-commit';
-        file_put_contents($preCommitScript, '#!/bin/sh' . PHP_EOL . $path . '/' . $check);
+        file_put_contents($preCommitScript, '#!/bin/sh' . PHP_EOL . $path . '/checkrun');
         chmod($preCommitScript, 0755);
     }
+
+    protected function installGitHook($root, $path, $check, $hook_type)
+    {
+        $location = $root . '/.git/hooks/' . $hook_type;
+        $contents = file_get_contents($path . '/' . $check);
+        file_put_contents($location, $contents);
+        chmod($location, 0755);
+    }
+
 }
 
 $runner = new CheckRunner();

@@ -8,7 +8,7 @@ $prefixes = ['[TASK]', '[DOC]', '[BUGFIX]', '[FEATURE]', '[REMOVAL]', 'Merge'];
 $errors = false;
 $messages = [];
 
-if (false === empty($commit) || substr_count(' ', $commit)) {
+if (true === empty($commit) || substr_count(' ', $commit)) {
     echo 'ERROR!: Message is of insufficient length - did you neglect to include a prefix? Valid ones are ';
     echo implode(', ', $prefixes);
     echo PHP_EOL;
