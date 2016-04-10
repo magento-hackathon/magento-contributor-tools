@@ -4,9 +4,7 @@ $path = dirname($argv[0]) . '/';
 $root = substr($path, 0, -11);
 $root = realpath($root);
 
-echo $root;
-
-$command = 'bin/phpcs -p --extensions=php --ignore=vendor --standard=PSR1,PSR2 .';
+$command = 'vendor/bin/phpcs -p --extensions=php --ignore=vendor --standard=PSR1,PSR2 .';
 $descriptors = array(
     array("pipe", "r"),
     array("pipe", "w"),
