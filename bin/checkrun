@@ -3,7 +3,7 @@
 /**
  * Main command for running the code style validation, unit tests and commit message checks.
  */
-const HOOK_PATH = 'vendor/amacgregor/magento-contributor-tools';
+const HOOK_PATH = '/vendor/amacgregor/magento-contributor-tools/';
 
 class CheckRunner
 {
