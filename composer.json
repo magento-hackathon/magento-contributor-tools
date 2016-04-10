@@ -13,7 +13,8 @@
     },
     "bin": [
         "bin/checkrun",
-        "bin/checkstyle"
+        "bin/checkstyle",
+        "bin/runtests"
     ],
     "config": {
         "bin-dir": "bin"

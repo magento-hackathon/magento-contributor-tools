@@ -11,7 +11,7 @@ $descriptors = [
     ["pipe", "w"],
     ["pipe", "r"]
 ];
-$pipes = array();
+$pipes = [];
 
 $process = proc_open($phpunit, $descriptors, $pipes, $root);
 fclose($pipes[0]);

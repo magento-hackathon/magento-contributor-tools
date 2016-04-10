@@ -10,7 +10,8 @@ $descriptors = array(
     array("pipe", "w"),
     array("pipe", "r")
 );
-$pipes = array();
+$pipes  = [];
+
 $process = proc_open($command, $descriptors, $pipes, $root);
 fclose($pipes[0]);
 while ($char = fread($pipes[1], 8)) {
