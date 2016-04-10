@@ -107,7 +107,7 @@ class CheckRunner
     protected function installGitHook($root, $path, $check, $hook_type)
     {
         $location = $root . '/.git/hooks/' . $hook_type;
-        $contents = file_get_contents(HOOK_PATH . $path . $check);
+        $contents = file_get_contents(HOOK_PATH . $path .'/'. $check);
         file_put_contents($location, $contents);
         chmod($location, 0755);
     }
