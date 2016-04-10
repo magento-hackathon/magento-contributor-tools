@@ -3,9 +3,11 @@
 /**
  * Main command for running the code style validation, unit tests and commit message checks.
  */
+const HOOK_PATH = 'vendor/amacgregor/magento-contributor-tools';
 
 class CheckRunner
 {
+
     protected function exitWithError($message, $code = 1)
     {
         echo '!! ERROR !!';
@@ -104,8 +106,9 @@ class CheckRunner
 
     protected function installGitHook($root, $path, $check, $hook_type)
     {
+
         $location = $root . '/.git/hooks/' . $hook_type;
-        $contents = file_get_contents($path . '/' . $check);
+        $contents = file_get_contents($path . HOOK_PATH . $check);
         file_put_contents($location, $contents);
         chmod($location, 0755);
     }
