@@ -28,7 +28,7 @@ class CheckRunner
         $root = realpath($root);
 
         # Step 2: Check that the hooks are in place and if not add them
-        $standardPathWarning = 'Path "%s" does not appear to contain an executable "phpunit" binary. Please make sure you called the ' .
+        $standardPathWarning = 'Path "%s" does not appear to contain an executable "%s" binary. Please make sure you called the ' .
             'script using the path ./vendor/bin/checkrun from the root of your project folder';
 
         foreach ($executables as $expectedExecutable) {
